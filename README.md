@@ -4,6 +4,18 @@
 A cool Documentation of this cool UI Library I made in my free time.
 ' or '1'='1#1917
 
+Added Library V2
+```lua
+toggle:SetValue(true)
+slider:SetValue(50) -- Automatically checks if the value is > max or < min
+dropdown:SetValue("Skid") -- Automatically checks if the value exists, if not it sets the first value
+dropdown:UpdateValues{"Skid", "Cum", "Black"} -- calls the callback and changes its size depending on the number of values
+keybind:SetKey(Enum.KeyCode.R)
+color:SetColor(Color3.fromRGB(255,255,255))
+```
+I'll be updating this one I believe
+
+
 ## Importing the Library
 
 - This is my first UI Library and It's not done yet.
