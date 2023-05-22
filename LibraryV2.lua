@@ -522,7 +522,7 @@ function Library:New(title)
 				UIListLayout_2.Parent = innerSection
 				UIListLayout_2.HorizontalAlignment = Enum.HorizontalAlignment.Center
 				UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
-				UIListLayout_2.Padding = UDim.new(0, 3)
+				UIListLayout_2.Padding = UDim.new(0, 2)
 
 				sectionHeader.Name = "sectionHeader"
 				sectionHeader.Parent = innerSection
@@ -588,8 +588,8 @@ function Library:New(title)
 				
 				local function updateSection()
 					local sc = UIListLayout_2.AbsoluteContentSize.Y
-					innerSection.Size = UDim2.new(0, 244, 0, sc + 4)
-					backgroundSection.Size = UDim2.new(0, 246, 0, sc + 6)
+					innerSection.Size = UDim2.new(0, 244, 0, sc + 8)
+					backgroundSection.Size = UDim2.new(0, 246, 0, sc + 10)
 					updateSize()
 				end
 				
@@ -615,7 +615,7 @@ function Library:New(title)
 					Divider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 					Divider.BackgroundTransparency = 1.000
 					Divider.Position = UDim2.new(0, 0, 0.076530613, 0)
-					Divider.Size = UDim2.new(0, 238, 0, 8)
+					Divider.Size = UDim2.new(0, 238, 0, 15)
 					Divider.ZIndex = 300001
 
 					DividerFrame.Name = "DividerFrame"
@@ -713,7 +713,7 @@ function Library:New(title)
 					Toggle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 					Toggle.BackgroundTransparency = 1.000
 					Toggle.Position = UDim2.new(0.0528455302, 0, 0.0636792481, 0)
-					Toggle.Size = UDim2.new(0, 224, 0, 15)
+					Toggle.Size = UDim2.new(0, 224, 0, 20)
 					Toggle.ZIndex = 300001
 
 					UIListLayout.Parent = Toggle
@@ -1899,8 +1899,8 @@ function Library:New(title)
 					UIListLayout_7.SortOrder = Enum.SortOrder.LayoutOrder
 					UIListLayout_7.VerticalAlignment = Enum.VerticalAlignment.Center
 					
-					local nega = (btnDropdown.AbsoluteSize.Y + dropdownText.AbsoluteSize.Y) + 8
-					local nega2 = (btnDropdown.AbsoluteSize.Y) + 5
+					local nega = (btnDropdown.AbsoluteSize.Y + dropdownText.AbsoluteSize.Y) + 7
+					local nega2 = (btnDropdown.AbsoluteSize.Y) + 3
 
 
 					if option.text == "nil" then
