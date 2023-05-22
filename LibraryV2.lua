@@ -398,6 +398,7 @@ function Library:New(title)
 		page.BackgroundTransparency = 1.000
 		page.Size = UDim2.new(0, 514, 0, 530)
 		page.ZIndex = 1999999
+		page.Visible = false
 
 		UIListLayoutttt.Parent = page
 		UIListLayoutttt.FillDirection = Enum.FillDirection.Horizontal
@@ -467,6 +468,13 @@ function Library:New(title)
 			UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 			UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 			UIListLayout.Padding = UDim.new(0,15)
+			
+			local function updateSize()
+				local cs =
+					UIListLayout.AbsoluteContentSize.Y
+				container.CanvasSize = UDim2.new(0, 0, 0, cs + 25)
+
+			end
 			
 			function sectionHandler:AddSection(title)
 				title = title or "New Section"
@@ -577,10 +585,12 @@ function Library:New(title)
 				UIPadding_2.Parent = sectionHeader
 				UIPadding_2.PaddingTop = UDim.new(0, -1)
 				
+				
 				local function updateSection()
 					local sc = UIListLayout_2.AbsoluteContentSize.Y
 					innerSection.Size = UDim2.new(0, 244, 0, sc + 4)
 					backgroundSection.Size = UDim2.new(0, 246, 0, sc + 6)
+					updateSize()
 				end
 				
 				function utilities:AddDivider(name)
@@ -1473,6 +1483,7 @@ function Library:New(title)
 					option.max = option.max or 100
 					option.value = option.value or 0
 					option.size = option.size or 13
+					option.suffix = option.suffix or ""
 					option.flag = option.flag or option.text
 					option.callback = typeof(option.callback) == "function" and option.callback or function() end
 					table.insert(Library.options, option)
@@ -1511,7 +1522,7 @@ function Library:New(title)
 					labelText.Size = UDim2.new(0, 220, 0, 15)
 					labelText.ZIndex = 300002
 					labelText.Font = Enum.Font.Jura
-					labelText.Text = option.text.." : "..option.value
+					labelText.Text = option.text.." : "..option.value..option.suffix
 					labelText.TextColor3 = Color3.fromRGB(255, 255, 255)
 					labelText.TextSize = 15.000
 					labelText.TextStrokeColor3 = Color3.fromRGB(16, 16, 16)
@@ -1606,7 +1617,7 @@ function Library:New(title)
 						valSlider.Size = UDim2.new(0, math.clamp(Mouse.X - valSlider.AbsolutePosition.X, 0, 222), 0, option.size)
 						moveconnection = Mouse.Move:Connect(function()
 							option.value = math.floor((((tonumber(option.max) - tonumber(option.min)) / 222) * valSlider.AbsoluteSize.X) + tonumber(option.min))
-							labelText.Text = option.text.." : "..option.value
+							labelText.Text = option.text.." : "..option.value..option.suffix
 							
 							btnSlider.BorderColor3 = theme.accent
 
@@ -1623,7 +1634,7 @@ function Library:New(title)
 
 
 							option.value = math.floor((((tonumber(option.max) - tonumber(option.min)) / 222) * valSlider.AbsoluteSize.X) + tonumber(option.min))
-							labelText.Text = option.text.." : "..option.value
+							labelText.Text = option.text.." : "..option.value..option.suffix
 
 							pcall(function()
 								option.callback(option.value)
@@ -1658,6 +1669,8 @@ function Library:New(title)
 							
 							valSlider.Size = UDim2.new(0, sdsd, 0, option.size)
 							option.value = option.max
+							labelText.Text = option.text.." : "..option.value..option.suffix
+
 							option.callback(option.value)
 
 
@@ -1667,6 +1680,8 @@ function Library:New(title)
 							
 							valSlider.Size = UDim2.new(0, prif, 0, option.size)
 							option.value = option.min
+							labelText.Text = option.text.." : "..option.value..option.suffix
+
 							option.callback(option.value)
 
 						else
@@ -1674,6 +1689,8 @@ function Library:New(title)
 							local rpf = math.floor(polsiz + 0.5)
 							valSlider.Size = UDim2.new(0, rpf, 0, option.size)
 							option.value = math.floor((((tonumber(option.max) - tonumber(option.min)) / 222) * valSlider.AbsoluteSize.X) + tonumber(option.min))
+							labelText.Text = option.text.." : "..option.value..option.suffix
+
 							option.callback(option.value)
 
 
