@@ -522,7 +522,7 @@ function Library:New(title)
 				UIListLayout_2.Parent = innerSection
 				UIListLayout_2.HorizontalAlignment = Enum.HorizontalAlignment.Center
 				UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
-				UIListLayout_2.Padding = UDim.new(0, 8)
+				UIListLayout_2.Padding = UDim.new(0, 3)
 
 				sectionHeader.Name = "sectionHeader"
 				sectionHeader.Parent = innerSection
@@ -615,7 +615,7 @@ function Library:New(title)
 					Divider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 					Divider.BackgroundTransparency = 1.000
 					Divider.Position = UDim2.new(0, 0, 0.076530613, 0)
-					Divider.Size = UDim2.new(0, 238, 0, 4)
+					Divider.Size = UDim2.new(0, 238, 0, 8)
 					Divider.ZIndex = 300001
 
 					DividerFrame.Name = "DividerFrame"
