@@ -69,8 +69,8 @@ local Library = {
 	flags = {},
 	key = keyLibrary,
 	gradient = {
-		[0] = Color3.fromRGB(84,61,255),
-		[1] = Color3.fromRGB(90,40,200)
+		[0] = Color3.fromRGB(43, 128, 255),
+		[1] = Color3.fromRGB(32, 97, 189)
 	}
 }
 
@@ -78,7 +78,7 @@ local Library = {
 local isFirstTab = true
 
 local theme = {
-	accent = Color3.fromRGB(255, 0, 4),
+	accent = Color3.fromRGB(43, 128, 255),
 	bgLight = Color3.fromRGB(27,27,27),
 	bgDark = Color3.fromRGB(23,23,23),
 	borderLight = Color3.fromRGB(50,50,50),
@@ -93,7 +93,7 @@ local theme = {
 
 
 
-local grad = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 4)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(150, 0, 2))}
+local grad = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Library.gradient[0]), ColorSequenceKeypoint.new(1.00, Library.gradient[1])}
 
 
 function Library:New(title)
@@ -137,6 +137,8 @@ function Library:New(title)
 	local innerPages = Instance.new("Frame")
 	local UIListLayout_7 = Instance.new("UIListLayout")
 	local UIListLayout_8 = Instance.new("UIListLayout")
+	
+	_G.MainWindow = backgroundDesign
 
 
 	backgroundDesign.Name = "backgroundDesign"
@@ -670,13 +672,19 @@ function Library:New(title)
 					option.flag = option.flag or option.text	
 					option.enabled = typeof(option.enabled) == "boolean" and option.enabled or false
 					option.risky = typeof(option.risky) == "boolean" and option.risky or false
+					option.type = "typeToggle"
+					option.state = option.state == nil or (typeof(option.state) == "boolean" and option.state or false)
 					option.callback = typeof(option.callback) == "function" and option.callback or function() end
+					Library.flags[option.flag] = option.state
 					table.insert(Library.options, option)
+					Library.options[option.flag] = option
+
+
 					
 					local toggle = {}
 					
 					local Toggle = Instance.new("Frame")
-					local UIListLayout = Instance.new("UIListLayout")
+					local UIListLayDout = Instance.new("UIListLayout")
 					local btnToggle = Instance.new("Frame")
 					local UIListLayout_2 = Instance.new("UIListLayout")
 					local toggleInner = Instance.new("Frame")
@@ -701,6 +709,7 @@ function Library:New(title)
 					ignoreButton.Text = ""
 					ignoreButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 					ignoreButton.TextSize = 14.000
+					ignoreButton.Transparency = 1
 
 					UIListLayout.Parent = Folder
 					UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -716,11 +725,11 @@ function Library:New(title)
 					Toggle.Size = UDim2.new(0, 224, 0, 20)
 					Toggle.ZIndex = 300001
 
-					UIListLayout.Parent = Toggle
-					UIListLayout.FillDirection = Enum.FillDirection.Horizontal
-					UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-					UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-					UIListLayout.Padding = UDim.new(0, 8)
+					UIListLayDout.Parent = Toggle
+					UIListLayDout.FillDirection = Enum.FillDirection.Horizontal
+					UIListLayDout.SortOrder = Enum.SortOrder.LayoutOrder
+					UIListLayDout.VerticalAlignment = Enum.VerticalAlignment.Center
+					UIListLayDout.Padding = UDim.new(0, 8)
 
 					btnToggle.Name = "btnToggle"
 					btnToggle.Parent = Toggle
@@ -772,12 +781,14 @@ function Library:New(title)
 					toggleText.TextXAlignment = Enum.TextXAlignment.Left
 					
 					local tog = option.enabled
-					
 					local toggled = tog
 					local x0x0 = option.callback
+					option.state = toggled
+
 
 					ignoreButton.MouseButton1Click:Connect(function()
 						toggled = not toggled
+						option.state = toggled
 						option.callback(toggled)
 						if toggled then
 							toggleInner.BackgroundColor3 = theme.accent
@@ -797,8 +808,12 @@ function Library:New(title)
 					if option.enabled == true then
 						toggleInner.BackgroundColor3 = theme.accent
 						option.callback(toggled)
+						toggled = true
+						option.state = toggled
 					else
 						toggleInner.BackgroundColor3 = theme.bgDark
+						toggled = false
+						option.state = toggled
 					end
 					
 					function toggle:SetValue(bool)
@@ -807,20 +822,24 @@ function Library:New(title)
 							toggleInner.BackgroundColor3 = theme.accent
 							option.enabled = true
 							toggled = true
+							option.state = toggled
 
 						elseif bool == false then
 							option.callback(false)
 							toggleInner.BackgroundColor3 = theme.bgDark
 							option.enabled = false
 							toggled = false
+							option.state = toggled
 						end
 					end
+					
 					
 					function toggle:AddKeybind(option)
 						option = typeof(option) == "table" and option or {} 
 						option.key = option.key or Enum.KeyCode.World95
 						option.async = typeof(option.async) == "boolean" and option.async or false
 						option.flag = option.flag or "yesasdsad"
+						option.type = "typeKeybind"
 						option.callback = typeof(option.callback) == "function" and option.callback or function() end
 						table.insert(Library.options, option)
 						
@@ -985,6 +1004,7 @@ function Library:New(title)
 						option = typeof(option) == "table" and option or {} 
 						option.flag = option.flag or "Piv"
 						option.color = option.color or Color3.fromRGB(255, 0, 0)
+						option.type = "typeColor"
 						option.callback = typeof(option.callback) == "function" and option.callback or function() end
 						
 						local toggledColor = {}
@@ -1322,6 +1342,7 @@ function Library:New(title)
 					
 					updateSection()
 					
+					
 					return toggle;
 					
 				end
@@ -1377,6 +1398,7 @@ function Library:New(title)
 					option.text = tostring(option.text) or "New Button"
 					option.callback = typeof(option.callback) == "function" and option.callback or function() end
 					option.flag = option.flag or option.text
+					option.type = "typeButton"
 					table.insert(Library.options, option)
 					
 					local button = {}
@@ -1398,7 +1420,7 @@ function Library:New(title)
 					Button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 					Button.BackgroundTransparency = 1.000
 					Button.Position = UDim2.new(0.0528455302, 0, 0.311320752, 0)
-					Button.Size = UDim2.new(0, 224, 0, 18)
+					Button.Size = UDim2.new(0, 224, 0, 20)
 					Button.ZIndex = 300001
 
 					UIListLayout.Parent = Button
@@ -1460,8 +1482,8 @@ function Library:New(title)
 					
 					btnButton.MouseButton1Click:Connect(function()
 						pcall(option.callback)
-						TextLabel.TextTransparency = 0.3
-						wait(0.1)
+						TextLabel.TextTransparency = 0.7
+						wait(0.05)
 						TextLabel.TextTransparency = 0
 					end)
 					
@@ -1485,6 +1507,7 @@ function Library:New(title)
 					option.size = option.size or 13
 					option.suffix = option.suffix or ""
 					option.flag = option.flag or option.text
+					option.type = "typeSlider"
 					option.callback = typeof(option.callback) == "function" and option.callback or function() end
 					table.insert(Library.options, option)
 					
@@ -1616,6 +1639,7 @@ function Library:New(title)
 						end)
 						valSlider.Size = UDim2.new(0, math.clamp(Mouse.X - valSlider.AbsolutePosition.X, 0, 222), 0, option.size)
 						moveconnection = Mouse.Move:Connect(function()
+							valSlider.Size = UDim2.new(0, math.clamp(Mouse.X - valSlider.AbsolutePosition.X, 0, 222), 0, option.size)
 							option.value = math.floor((((tonumber(option.max) - tonumber(option.min)) / 222) * valSlider.AbsoluteSize.X) + tonumber(option.min))
 							labelText.Text = option.text.." : "..option.value..option.suffix
 							
@@ -1625,37 +1649,41 @@ function Library:New(title)
 								option.callback(option.value)
 							end)
 
-							valSlider.Size = UDim2.new(0, math.clamp(Mouse.X - valSlider.AbsolutePosition.X, 0, 222), 0, option.size)
 
 
 						end)
 
 						clickconnection = btnSlider.MouseButton1Click:Connect(function()
 
+							valSlider.Size = UDim2.new(0, math.clamp(Mouse.X - valSlider.AbsolutePosition.X, 0, 222), 0, option.size)
 
 							option.value = math.floor((((tonumber(option.max) - tonumber(option.min)) / 222) * valSlider.AbsoluteSize.X) + tonumber(option.min))
 							labelText.Text = option.text.." : "..option.value..option.suffix
-
+							
 							pcall(function()
 								option.callback(option.value)
 							end)
 
-							valSlider.Size = UDim2.new(0, math.clamp(Mouse.X - valSlider.AbsolutePosition.X, 0, 222), 0, option.size)
+
+
 							clickconnection:Disconnect()
 							moveconnection:Disconnect()
-							releaseconnection:Disconnect()
 						end)
 
 
 						releaseconnection = UserInputService.InputEnded:Connect(function(Mouse)
 							if Mouse.UserInputType == Enum.UserInputType.MouseButton1 then
-								btnSlider.BorderColor3 = theme.borderDark
 								moveconnection:Disconnect()
 								releaseconnection:Disconnect()
 								clickconnection:Disconnect()
+								btnSlider.BorderColor3 = theme.borderDark
 
 							end
 						end)
+					end)
+					
+					btnSlider.MouseButton1Click:Connect(function()
+						
 					end)
 					
 					valSlider.Size = UDim2.new(0, valueSize, 0, option.size)
@@ -1726,6 +1754,7 @@ function Library:New(title)
 					option.values = option.values or {}
 					option.value = option.value or table.unpack(option.values, 1, #option.values)
 					option.flag = option.flag or option.text
+					option.type = "typeDropdown"
 					option.callback = typeof(option.callback) == "function" and option.callback or function() end
 					table.insert(Library.options, option)
 					
@@ -1899,6 +1928,16 @@ function Library:New(title)
 					UIListLayout_7.SortOrder = Enum.SortOrder.LayoutOrder
 					UIListLayout_7.VerticalAlignment = Enum.VerticalAlignment.Center
 					
+					local isSEXVal = Instance.new("BoolValue", backgroundDD)
+					isSEXVal.Name = "isSEXVal"
+					isSEXVal.Value = false
+					
+					
+					
+						
+
+					local isOpened = true
+					
 					local nega = (btnDropdown.AbsoluteSize.Y + dropdownText.AbsoluteSize.Y) + 7
 					local nega2 = (btnDropdown.AbsoluteSize.Y) + 3
 
@@ -1920,22 +1959,53 @@ function Library:New(title)
 						innerDD.Size = UDim2.new(0, 222, 0, plex)
 						SFDD.Size = UDim2.new(0, 222, 0, plex)
 
-					elseif #option.values >= 4  then
-						backgroundDD.Size = UDim2.new(0, 224, 0, 66)
-						forBGIGN.Size = UDim2.new(0, 224, 0, 66)
-						innerDD.Size = UDim2.new(0, 22, 0, 64)
-						SFDD.Size = UDim2.new(0, 222, 0, 64)
+					elseif #option.values >= 15  then
+						backgroundDD.Size = UDim2.new(0, 224, 0, 242)
+						forBGIGN.Size = UDim2.new(0, 224, 0, 242)
+						innerDD.Size = UDim2.new(0, 22, 0, 240)
+						SFDD.Size = UDim2.new(0, 222, 0, 240)
 					end
+					
 					
 					local isDropped = false
 					
 					btnDropdown.MouseButton1Click:Connect(function()
-						if isDropped then
+						
+						
+						if isSEXVal.Value then
 							backgroundDD.Visible = false
+							isSEXVal.Value = false
+							btnDropdown.BorderColor3 = theme.borderDark
+
 						else
+							for _, v in pairs(page:GetDescendants()) do
+								if v:IsA("BoolValue") and v.Name == "isSEXVal" then
+									local frame = v.Parent
+									local btn = v.Parent.Parent.Parent.btnDropdown
+									btn.BorderColor3 = theme.borderDark
+									v.Value = false
+									frame.Visible = false
+								end
+							end
+							btnDropdown.BorderColor3 = theme.accent
+
 							backgroundDD.Visible = true
+							isSEXVal.Value = true
+
 						end
-						isDropped = not isDropped
+						
+
+						
+						--for i, v in next, page:GetDescendants() do
+						--	if v:IsA("BoolValue") and v.Name == "isSEXVal" then
+						--		local pvcio = v.Parent
+						--		local mrdka = v.Parent.Parent.Parent.btnDropdown
+						--		pvcio.Visible = false
+						--		mrdka.BorderColor3 = theme.borderDark
+						--		v.Value = false
+						--	end
+						--end
+						
 
 					end)
 					
@@ -1944,7 +2014,7 @@ function Library:New(title)
 					end)
 
 					btnDropdown.MouseLeave:Connect(function()
-						if isDropped then
+						if isSEXVal.Value == true then
 							btnDropdown.BorderColor3 = theme.accent
 						else
 							btnDropdown.BorderColor3 = theme.borderDark
@@ -1980,7 +2050,7 @@ function Library:New(title)
 							TextLabel.Text = option.value
 							option.callback(option.value)
 
-							isDropped = false
+							isSEXVal.Value = false
 							backgroundDD.Visible = false
 							btnDropdown.BorderColor3 = theme.borderDark
 
@@ -2056,7 +2126,7 @@ function Library:New(title)
 								TextLabel.Text = option.value
 								option.callback(option.value)
 
-								isDropped = false
+								isSEXVal.Value = false
 								backgroundDD.Visible = false
 								btnDropdown.BorderColor3 = theme.borderDark
 
@@ -2102,6 +2172,7 @@ function Library:New(title)
 					option.text = option.text or "New Color"
 					option.flag = option.flag or "Piv"
 					option.color = option.color or Color3.fromRGB(255, 0, 0)
+					option.type = "typeColor"
 					option.callback = typeof(option.callback) == "function" and option.callback or function() end
 
 					local clr = {}
@@ -2346,10 +2417,11 @@ function Library:New(title)
 					btnColor.MouseButton1Click:Connect(function()
 						isDADDYVal.Value = not isDADDYVal.Value
 						if isDADDYVal.Value == false then
-							for i, v in next, innerSection:GetDescendants() do
+							for i, v in next, page:GetDescendants() do
 								if v:IsA("BoolValue") and v.Name == "isDADDYVal" then
 									local pvcio = v.Parent
 									pvcio.Visible = false
+
 									v.Value = true
 								end
 							end
@@ -2479,6 +2551,7 @@ function Library:New(title)
 					option.key = option.key or Enum.KeyCode.World95
 					option.async = typeof(option.async) == "boolean" and option.async or false
 					option.flag = option.flag or "yesasdsad"
+					option.type = "typeKeybind"
 					option.callback = typeof(option.callback) == "function" and option.callback or function() end
 					table.insert(Library.options, option)
 					
@@ -2653,6 +2726,179 @@ function Library:New(title)
 					end
 					
 					return bind;
+				end
+				
+				function utilities:AddSpace(size)
+					size = size or 3
+					local Space = Instance.new("Frame")
+
+					--Properties:
+
+					Space.Name = "Dropdown"
+					Space.Parent = innerSection
+					Space.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+					Space.BackgroundTransparency = 1.000
+					Space.Position = UDim2.new(0.0528455302, 0, 0.365566045, 0)
+					Space.Size = UDim2.new(0, 224, 0, size)
+					Space.ZIndex = 300001
+					
+					updateSection()
+					
+				end
+				
+				function utilities:AddTextbox(option)
+					option = typeof(option) == "table" and option or {} 
+					option.text = tostring(option.text) or "false"
+					option.value = option.value or ""
+					option.placeholdertext = option.placeholdertext or ""
+					option.clearonfocus = typeof(option.clearonfocus) == "boolean" and option.clearonfocus or false
+					option.flag = option.flag or option.text
+					option.callback = typeof(option.callback) == "function" and option.callback or function() end
+					table.insert(Library.options, option)
+					
+					-- Gui to Lua
+					-- Version: 3.2
+
+					-- Instances:
+
+					local Textbox = Instance.new("Frame")
+					local UIListLayout = Instance.new("UIListLayout")
+					local textoxText = Instance.new("TextLabel")
+					local textboxOutter = Instance.new("TextButton")
+					local UIListLayout_2 = Instance.new("UIListLayout")
+					local textboxInner = Instance.new("Frame")
+					local gradienBtnButton = Instance.new("UIGradient")
+					local TextBox = Instance.new("TextBox")
+					local UIPadding = Instance.new("UIPadding")
+					local UIListLayout_3 = Instance.new("UIListLayout")
+
+					--Properties:
+
+					Textbox.Name = "Textbox"
+					Textbox.Parent = innerSection
+					Textbox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+					Textbox.BackgroundTransparency = 1.000
+					Textbox.Position = UDim2.new(0.0528455302, 0, 0.365566045, 0)
+					Textbox.Size = UDim2.new(0, 224, 0, 40)
+					Textbox.ZIndex = 300001
+
+					UIListLayout.Parent = Textbox
+					UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+					UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+					UIListLayout.Padding = UDim.new(0, 5)
+
+					textoxText.Name = "textoxText"
+					textoxText.Parent = Textbox
+					textoxText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+					textoxText.BackgroundTransparency = 1.000
+					textoxText.Size = UDim2.new(0, 220, 0, 15)
+					textoxText.ZIndex = 300002
+					textoxText.Font = Enum.Font.Jura
+					textoxText.Text = option.text
+					textoxText.TextColor3 = Color3.fromRGB(255, 255, 255)
+					textoxText.TextSize = 15.000
+					textoxText.TextStrokeColor3 = Color3.fromRGB(16, 16, 16)
+					textoxText.TextStrokeTransparency = 0.300
+					textoxText.TextXAlignment = Enum.TextXAlignment.Left
+
+					textboxOutter.Name = "textboxOutter"
+					textboxOutter.Parent = Textbox
+					textboxOutter.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+					textboxOutter.BorderColor3 = Color3.fromRGB(0, 0, 0)
+					textboxOutter.Size = UDim2.new(0, 224, 0, 18)
+					textboxOutter.ZIndex = 300002
+
+					UIListLayout_2.Parent = textboxOutter
+					UIListLayout_2.HorizontalAlignment = Enum.HorizontalAlignment.Center
+					UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
+					UIListLayout_2.VerticalAlignment = Enum.VerticalAlignment.Center
+					UIListLayout_2.Padding = UDim.new(0, 3)
+
+					textboxInner.Name = "textboxInner"
+					textboxInner.Parent = textboxOutter
+					textboxInner.BackgroundColor3 = Color3.fromRGB(27, 27, 27)
+					textboxInner.BorderColor3 = Color3.fromRGB(50, 50, 50)
+					textboxInner.Position = UDim2.new(0, 0, 0.588888884, 0)
+					textboxInner.Size = UDim2.new(0, 222, 0, 16)
+					textboxInner.ZIndex = 300002
+
+					gradienBtnButton.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(190, 190, 190))}
+					gradienBtnButton.Rotation = 90
+					gradienBtnButton.Name = "gradienBtnButton"
+					gradienBtnButton.Parent = textboxInner
+
+					TextBox.Parent = textboxInner
+					TextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+					TextBox.BackgroundTransparency = 1.000
+					TextBox.ClipsDescendants = true
+					TextBox.Size = UDim2.new(0, 222, 0, 16)
+					TextBox.ZIndex = 300003
+					TextBox.Font = Enum.Font.Jura
+					TextBox.Text = option.value
+					TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+					TextBox.TextSize = 14.000
+					TextBox.TextStrokeColor3 = Color3.fromRGB(16, 16, 16)
+					TextBox.TextStrokeTransparency = 0.300
+					TextBox.TextXAlignment = Enum.TextXAlignment.Left
+					TextBox.PlaceholderText = option.placeholdertext
+					
+					if option.clearonfocus == true then
+						TextBox.ClearTextOnFocus = true
+					else
+						TextBox.ClearTextOnFocus = false
+
+					end
+
+					UIPadding.Parent = TextBox
+					UIPadding.PaddingBottom = UDim.new(0, 1)
+					UIPadding.PaddingLeft = UDim.new(0, 5)
+
+					UIListLayout_3.Parent = textboxInner
+					UIListLayout_3.HorizontalAlignment = Enum.HorizontalAlignment.Center
+					UIListLayout_3.SortOrder = Enum.SortOrder.LayoutOrder
+					UIListLayout_3.VerticalAlignment = Enum.VerticalAlignment.Center
+					UIListLayout_3.Padding = UDim.new(0, 3)
+					
+					if textoxText.Text == "nil" then
+						textoxText:Destroy()
+						Textbox.Size = UDim2.new(0,230,0,20)
+						textoxText.VerticalAlignment = Enum.VerticalAlignment.Center
+					else
+						textoxText.Visible = true
+					end
+					
+					textboxOutter.MouseEnter:Connect(function()
+						textboxOutter.BorderColor3 = theme.accent
+					end)
+
+					textboxOutter.MouseLeave:Connect(function()
+						textboxOutter.BorderColor3 = theme.borderDark
+					end)
+					
+					local enterDown = false
+
+					InputService.InputBegan:Connect(function(input)
+						if input.KeyCode == Enum.KeyCode.Return then 
+							enterDown = true 
+						end
+					end)
+
+					InputService.InputEnded:Connect(function(input)
+						if input.KeyCode == Enum.KeyCode.Return then 
+							enterDown = false 
+						end
+					end)
+
+					TextBox.FocusLost:Connect(function()
+						task.wait()
+						if enterDown then 
+							option.callback(TextBox.Text)
+						end 
+					end)
+
+					option.callback(option.value)
+
+					updateSection()
 				end
 				
 				return utilities;
