@@ -1,3 +1,12 @@
+if not game:IsLoaded() then
+	game.Loaded:Wait()
+end
+
+setfpscap = setfpscap
+if setfpscap then
+	setfpscap(0)
+end
+
 local InputService = game:GetService('UserInputService');
 local TextService = game:GetService('TextService');
 local CoreGui = game:GetService('CoreGui');
@@ -919,18 +928,19 @@ function Library:New(title)
 						ignoreButton.MouseLeave:Connect(function()
 							btnToggle.BorderColor3 = theme.borderDark
 						end)
-
+						local isListening = false
 						
 						local rarw = option.key.Name
 						btnBind.MouseButton1Click:Connect(
 							function()
 								btnBind.Text = "[ ... ]"
+								isListening = true
 								local inputWait = UserInputService.InputBegan:wait()
 								if inputWait.KeyCode.Name ~= "Unknown" then
 									local K = shorts[inputWait.KeyCode.Name] or inputWait.KeyCode.Name
 									btnBind.Text = "[ "..K.." ]"
 									rarw = inputWait.KeyCode.Name
-									binded = not binded
+
 									tog = not tog
 									local newBindButtonSize =
 										TextService:GetTextSize(
@@ -940,39 +950,51 @@ function Library:New(title)
 											Vector2.new(math.huge, math.huge)
 										)
 									btnBind.Size = UDim2.new(0, 0 + newBindButtonSize.X, 0, 15)
+									wait()
+									isListening = false
 								end
 							end
 						)
 						
 						
 						option.async = option.async
-						
+						local keyPressed = false
+
 
 						UserInputService.InputBegan:Connect(
 							function(c, p)
 								if not p then
 									if c.KeyCode.Name == rarw then
-										if option.async == false then
-											if toggled then
-												pcall(option.callback)
+										if isListening == false then
+											if option.async == false then
+												if toggled then
+													pcall(option.callback)
+												end
+
+											elseif option.async == true then
+												toggled = not toggled
+
+												x0x0(toggled)
+
+
+												if toggled == true then
+
+													toggleInner.BackgroundColor3 = theme.accent
+
+												elseif toggled == false then
+													toggleInner.BackgroundColor3 = theme.bgDark
+												end
+
+
 											end
-											
-										elseif option.async == true then
-											
-											toggled = not toggled
-											binded = not binded
-											x0x0(toggled)
-
-
+										elseif isListening == true then
+											toggled = toggled
 											if toggled == true then
-												
 												toggleInner.BackgroundColor3 = theme.accent
-												
-											elseif toggled == false then
-												
+											else
 												toggleInner.BackgroundColor3 = theme.bgDark
 											end
-											
+
 										end
 									end
 								end
@@ -1338,9 +1360,434 @@ function Library:New(title)
 						return toggledColor;
 
 					end
+					
+					function toggle:AddDropdown(option)
+						option = typeof(option) == "table" and option or {} 
+						option.text = tostring(option.text) or "nil"
+						option.values = option.values or {}
+						option.value = option.value or table.unpack(option.values, 1, #option.values)
+						option.flag = option.flag or option.text
+						option.type = "typeDropdown"
+						option.callback = typeof(option.callback) == "function" and option.callback or function() end
+						table.insert(Library.options, option)
+						
+						Toggle.Size = UDim2.new(0, 224,0, 40)
+						
+						
+						local f1 = Instance.new("Folder", btnToggle)
+						local f2 = Instance.new("Folder", btnToggle)
+						
+						local unn = Instance.new("UIListLayout", f1)
+						unn.HorizontalAlignment = Enum.HorizontalAlignment.Left
+						unn.FillDirection = Enum.FillDirection.Vertical
+						unn.VerticalAlignment = Enum.VerticalAlignment.Center
+						
+						local unn2 = Instance.new("UIListLayout", f2)
+						unn2.HorizontalAlignment = Enum.HorizontalAlignment.Left
+						unn2.FillDirection = Enum.FillDirection.Vertical
+						unn2.VerticalAlignment = Enum.VerticalAlignment.Center
+						ignoreButton.Parent = f2
+
+						toggleText.Parent = f1
+						local padd = Instance.new("UIPadding", toggleText)
+						padd.PaddingLeft = UDim.new(0, 21)
+						padd.PaddingTop = UDim.new(0, -1)
+
+						
+						UIListLayDout.FillDirection = Enum.FillDirection.Vertical
+						UIListLayDout.Padding = UDim.new(0,7)
+						
+						if Toggle:FindFirstChild("toggleBind") then
+							local x = Toggle:FindFirstChild("toggleBind")
+							x.UIListLayout:Destroy()
+							local xd = Instance.new("Frame", x)
+							local xdadfdf = Instance.new("UIListLayout", x)
+							xdadfdf.HorizontalAlignment = Enum.HorizontalAlignment.Right
+							xdadfdf.VerticalAlignment = Enum.VerticalAlignment.Top
+							xd.Size = UDim2.new(0,100,0,15)
+							local listlay = Instance.new("UIListLayout", xd)
+							listlay.HorizontalAlignment = Enum.HorizontalAlignment.Right
+							listlay.VerticalAlignment = Enum.VerticalAlignment.Top
+
+							local apdding = Instance.new("UIPadding", xd)
+							apdding.PaddingTop = UDim.new(0, -1)
+							x.btnBind.Parent = xd
+							
+						end
+
+
+						local dd = {}
+
+
+						local btnDropdown = Instance.new("TextButton")
+						local buttonInner = Instance.new("Frame")
+						local TextLabel = Instance.new("TextLabel")
+						local UIPadding = Instance.new("UIPadding")
+						local UIListLayout_2 = Instance.new("UIListLayout")
+						local gradienBtnButton = Instance.new("UIGradient")
+						local UIListLayout_3 = Instance.new("UIListLayout")
+						local ignoreDropdown = Instance.new("Folder")
+						local backgroundDD = Instance.new("Frame")
+						local UIListLayout_4 = Instance.new("UIListLayout")
+						local forBGIGN = Instance.new("TextButton")
+						local innerDD = Instance.new("Frame")
+						local gradienBtnButton_2 = Instance.new("UIGradient")
+						local SFDD = Instance.new("ScrollingFrame")
+						local UIListLayout_5 = Instance.new("UIListLayout")
+						local UIListLayout_6 = Instance.new("UIListLayout")
+						local UIListLayout_7 = Instance.new("UIListLayout")
+
+						--Properties:
+
+
+						btnDropdown.Name = "btnDropdown"
+						btnDropdown.Parent = Toggle
+						btnDropdown.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+						btnDropdown.BorderColor3 = Color3.fromRGB(0, 0, 0)
+						btnDropdown.Size = UDim2.new(0, 224, 0, 18)
+						btnDropdown.ZIndex = 300002
+						btnDropdown.AutoButtonColor = false
+						btnDropdown.Font = Enum.Font.SourceSans
+						btnDropdown.Text = ""
+						btnDropdown.TextColor3 = Color3.fromRGB(0, 0, 0)
+						btnDropdown.TextSize = 14.000
+
+						buttonInner.Name = "buttonInner"
+						buttonInner.Parent = btnDropdown
+						buttonInner.BackgroundColor3 = Color3.fromRGB(27, 27, 27)
+						buttonInner.BorderColor3 = Color3.fromRGB(50, 50, 50)
+						buttonInner.Position = UDim2.new(0, 0, 0.588888884, 0)
+						buttonInner.Size = UDim2.new(0, 222, 0, 16)
+						buttonInner.ZIndex = 300002
+
+						TextLabel.Parent = buttonInner
+						TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						TextLabel.BackgroundTransparency = 1.000
+						TextLabel.BorderColor3 = Color3.fromRGB(50, 50, 50)
+						TextLabel.Size = UDim2.new(0, 222, 0, 16)
+						TextLabel.ZIndex = 300003
+						TextLabel.Font = Enum.Font.Jura
+						TextLabel.Text = option.value
+						TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+						TextLabel.TextSize = 14.000
+						TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+						UIPadding.Parent = TextLabel
+						UIPadding.PaddingBottom = UDim.new(0, 1)
+						UIPadding.PaddingLeft = UDim.new(0, 5)
+
+						UIListLayout_2.Parent = buttonInner
+						UIListLayout_2.HorizontalAlignment = Enum.HorizontalAlignment.Center
+						UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
+						UIListLayout_2.VerticalAlignment = Enum.VerticalAlignment.Center
+						UIListLayout_2.Padding = UDim.new(0, 3)
+
+						gradienBtnButton.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(190, 190, 190))}
+						gradienBtnButton.Rotation = 90
+						gradienBtnButton.Name = "gradienBtnButton"
+						gradienBtnButton.Parent = buttonInner
+
+						UIListLayout_3.Parent = btnDropdown
+						UIListLayout_3.HorizontalAlignment = Enum.HorizontalAlignment.Center
+						UIListLayout_3.SortOrder = Enum.SortOrder.LayoutOrder
+						UIListLayout_3.VerticalAlignment = Enum.VerticalAlignment.Center
+						UIListLayout_3.Padding = UDim.new(0, 3)
+
+						ignoreDropdown.Name = "ignoreDropdown"
+						ignoreDropdown.Parent = Toggle
+
+						backgroundDD.Name = "backgroundDD"
+						backgroundDD.Parent = ignoreDropdown
+						backgroundDD.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+						backgroundDD.BorderColor3 = Color3.fromRGB(0, 0, 0)
+						backgroundDD.Position = UDim2.new(0, 0, 1.08, 0)
+						backgroundDD.Size = UDim2.new(0, 224, 0, 66)
+						backgroundDD.Visible = false
+						backgroundDD.ZIndex = 300010
+
+						UIListLayout_4.Parent = backgroundDD
+						UIListLayout_4.HorizontalAlignment = Enum.HorizontalAlignment.Center
+						UIListLayout_4.SortOrder = Enum.SortOrder.LayoutOrder
+						UIListLayout_4.VerticalAlignment = Enum.VerticalAlignment.Center
+
+						forBGIGN.Name = "forBGIGN"
+						forBGIGN.Parent = backgroundDD
+						forBGIGN.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						forBGIGN.BackgroundTransparency = 1.000
+						forBGIGN.Selectable = false
+						forBGIGN.Size = UDim2.new(0, 224, 0, 66)
+						forBGIGN.ZIndex = 300011
+						forBGIGN.Font = Enum.Font.SourceSans
+						forBGIGN.Text = ""
+						forBGIGN.TextColor3 = Color3.fromRGB(0, 0, 0)
+						forBGIGN.TextSize = 14.000
+
+						innerDD.Name = "innerDD"
+						innerDD.Parent = forBGIGN
+						innerDD.BackgroundColor3 = Color3.fromRGB(27, 27, 27)
+						innerDD.BorderColor3 = Color3.fromRGB(50, 50, 50)
+						innerDD.Position = UDim2.new(-0.00450450461, 0, 1.31249809, 0)
+						innerDD.Selectable = true
+						innerDD.Size = UDim2.new(0, 222, 0, 64)
+						innerDD.ZIndex = 300011
+
+						gradienBtnButton_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(190, 190, 190))}
+						gradienBtnButton_2.Rotation = 90
+						gradienBtnButton_2.Name = "gradienBtnButton"
+						gradienBtnButton_2.Parent = innerDD
+
+						SFDD.Name = "SFDD"
+						SFDD.Parent = innerDD
+						SFDD.Active = true
+						SFDD.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						SFDD.BackgroundTransparency = 1.000
+						SFDD.BorderSizePixel = 0
+						SFDD.Size = UDim2.new(0, 222, 0, 64)
+						SFDD.ZIndex = 300012
+						SFDD.ScrollBarThickness = 0
+
+						UIListLayout_5.Parent = SFDD
+						UIListLayout_5.SortOrder = Enum.SortOrder.LayoutOrder
+
+						UIListLayout_6.Parent = innerDD
+						UIListLayout_6.HorizontalAlignment = Enum.HorizontalAlignment.Center
+						UIListLayout_6.SortOrder = Enum.SortOrder.LayoutOrder
+						UIListLayout_6.VerticalAlignment = Enum.VerticalAlignment.Center
+
+						UIListLayout_7.Parent = forBGIGN
+						UIListLayout_7.HorizontalAlignment = Enum.HorizontalAlignment.Center
+						UIListLayout_7.SortOrder = Enum.SortOrder.LayoutOrder
+						UIListLayout_7.VerticalAlignment = Enum.VerticalAlignment.Center
+
+						local isSEXVal = Instance.new("BoolValue", backgroundDD)
+						isSEXVal.Name = "isSEXVal"
+						isSEXVal.Value = false
+
+
+
+
+
+						local isOpened = true
+
+						if #option.values <= 4 then
+							local plex = #option.values * 16
+							backgroundDD.Size = UDim2.new(0, 224, 0, plex + 2)
+							forBGIGN.Size = UDim2.new(0, 224, 0, plex + 2)
+							innerDD.Size = UDim2.new(0, 222, 0, plex)
+							SFDD.Size = UDim2.new(0, 222, 0, plex)
+
+						elseif #option.values >= 15  then
+							backgroundDD.Size = UDim2.new(0, 224, 0, 242)
+							forBGIGN.Size = UDim2.new(0, 224, 0, 242)
+							innerDD.Size = UDim2.new(0, 22, 0, 240)
+							SFDD.Size = UDim2.new(0, 222, 0, 240)
+						end
+
+
+						local isDropped = false
+
+						btnDropdown.MouseButton1Click:Connect(function()
+
+
+							if isSEXVal.Value then
+								backgroundDD.Visible = false
+								isSEXVal.Value = false
+								btnDropdown.BorderColor3 = theme.borderDark
+
+							else
+								for _, v in pairs(page:GetDescendants()) do
+									if v:IsA("BoolValue") and v.Name == "isSEXVal" then
+										local frame = v.Parent
+										local btn = v.Parent.Parent.Parent.btnDropdown
+										btn.BorderColor3 = theme.borderDark
+										v.Value = false
+										frame.Visible = false
+									end
+								end
+								btnDropdown.BorderColor3 = theme.accent
+
+								backgroundDD.Visible = true
+								isSEXVal.Value = true
+
+							end
+
+
+
+							--for i, v in next, page:GetDescendants() do
+							--	if v:IsA("BoolValue") and v.Name == "isSEXVal" then
+							--		local pvcio = v.Parent
+							--		local mrdka = v.Parent.Parent.Parent.btnDropdown
+							--		pvcio.Visible = false
+							--		mrdka.BorderColor3 = theme.borderDark
+							--		v.Value = false
+							--	end
+							--end
+
+
+						end)
+
+						btnDropdown.MouseEnter:Connect(function()
+							btnDropdown.BorderColor3 = theme.accent
+						end)
+
+						btnDropdown.MouseLeave:Connect(function()
+							if isSEXVal.Value == true then
+								btnDropdown.BorderColor3 = theme.accent
+							else
+								btnDropdown.BorderColor3 = theme.borderDark
+							end
+						end)
+
+						local function updateCanvas()
+							local sc = UIListLayout_5.AbsoluteContentSize.Y
+							SFDD.CanvasSize = UDim2.new(0, 0, 0, sc)
+						end
+
+						for i, v in next, option.values do
+
+							local btnDropdownSF = Instance.new("TextButton")
+							local paddingBtnDropdownSF = Instance.new("UIPadding")
+
+							--Properties:
+
+							btnDropdownSF.Name = "btnDropdownSF"
+							btnDropdownSF.Parent = SFDD
+							btnDropdownSF.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+							btnDropdownSF.BackgroundTransparency = 1.000
+							btnDropdownSF.Size = UDim2.new(0, 222, 0, 16)
+							btnDropdownSF.ZIndex = 300013
+							btnDropdownSF.AutoButtonColor = false
+							btnDropdownSF.Font = Enum.Font.Jura
+							btnDropdownSF.TextColor3 = Color3.fromRGB(255, 255, 255)
+							btnDropdownSF.TextSize = 14.000
+							btnDropdownSF.TextXAlignment = Enum.TextXAlignment.Left
+							btnDropdownSF.Text = v
+							btnDropdownSF.MouseButton1Click:Connect(function()
+								option.value = v
+								TextLabel.Text = option.value
+								option.callback(option.value)
+
+								isSEXVal.Value = false
+								backgroundDD.Visible = false
+								btnDropdown.BorderColor3 = theme.borderDark
+
+							end)
+
+							btnDropdownSF.MouseEnter:Connect(function()
+								btnDropdownSF.TextTransparency = theme.transparency
+							end)
+
+							btnDropdownSF.MouseLeave:Connect(function()
+								btnDropdownSF.TextTransparency = 0
+							end)
+
+							paddingBtnDropdownSF.Name = "paddingBtnDropdownSF"
+							paddingBtnDropdownSF.Parent = btnDropdownSF
+							paddingBtnDropdownSF.PaddingBottom = UDim.new(0, 1)
+							paddingBtnDropdownSF.PaddingLeft = UDim.new(0, 5)
+
+							updateCanvas()
+
+						end
+
+
+						option.callback(option.value)
+
+						updateSection()
+
+						function dd:SetValue(x)
+							if table.find(option.values, x) then
+								option.value = x
+							else
+								option.value = table.unpack(option.values, 1, #option.values)
+							end
+							TextLabel.Text = option.value
+							option.callback(option.value)
+						end
+
+						function dd:UpdateValues(values)
+							values = typeof(values) == "table" and values or {}
+							option.values = values
+							for _, v in next, SFDD:GetChildren() do
+								if v:IsA("TextButton") then
+									v:Destroy()
+								end
+							end
+
+							for i, v in next, option.values do
+
+								local btnDropdownSF = Instance.new("TextButton")
+								local paddingBtnDropdownSF = Instance.new("UIPadding")
+
+								--Properties:
+
+								btnDropdownSF.Name = "btnDropdownSF"
+								btnDropdownSF.Parent = SFDD
+								btnDropdownSF.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+								btnDropdownSF.BackgroundTransparency = 1.000
+								btnDropdownSF.Size = UDim2.new(0, 222, 0, 16)
+								btnDropdownSF.ZIndex = 300013
+								btnDropdownSF.AutoButtonColor = false
+								btnDropdownSF.Font = Enum.Font.Jura
+								btnDropdownSF.TextColor3 = Color3.fromRGB(255, 255, 255)
+								btnDropdownSF.TextSize = 14.000
+								btnDropdownSF.TextXAlignment = Enum.TextXAlignment.Left
+								btnDropdownSF.Text = v
+
+								paddingBtnDropdownSF.Name = "paddingBtnDropdownSF"
+								paddingBtnDropdownSF.Parent = btnDropdownSF
+								paddingBtnDropdownSF.PaddingBottom = UDim.new(0, 1)
+								paddingBtnDropdownSF.PaddingLeft = UDim.new(0, 5)
+								btnDropdownSF.MouseButton1Click:Connect(function()
+									option.value = v
+									TextLabel.Text = option.value
+									option.callback(option.value)
+
+									isSEXVal.Value = false
+									backgroundDD.Visible = false
+									btnDropdown.BorderColor3 = theme.borderDark
+
+								end)
+
+								btnDropdownSF.MouseEnter:Connect(function()
+									btnDropdownSF.TextTransparency = theme.transparency
+								end)
+
+								btnDropdownSF.MouseLeave:Connect(function()
+									btnDropdownSF.TextTransparency = 0
+								end)
+
+								updateCanvas()
+							end
+
+							if #option.values <= 4 then
+								local plex = #option.values * 16
+								backgroundDD.Size = UDim2.new(0, 224, 0, plex + 2)
+								forBGIGN.Size = UDim2.new(0, 224, 0, plex + 2)
+								innerDD.Size = UDim2.new(0, 222, 0, plex)
+								SFDD.Size = UDim2.new(0, 222, 0, plex)
+
+							elseif #option.values >= 4  then
+								backgroundDD.Size = UDim2.new(0, 224, 0, 66)
+								forBGIGN.Size = UDim2.new(0, 224, 0, 66)
+								innerDD.Size = UDim2.new(0, 22, 0, 64)
+								SFDD.Size = UDim2.new(0, 222, 0, 64)
+							end
+
+							option.value = table.unpack(option.values, 1, #option.values)
+							TextLabel.Text = option.value
+							option.callback(option.value)
+
+						end
+
+
+						return dd;
+					end
 				
 					
 					updateSection()
+					
+					
 					
 					
 					return toggle;
@@ -2659,7 +3106,7 @@ function Library:New(title)
 						btnBind.Text = "[ "..tostring(option.key.Name).." ]"
 					end
 
-
+					local isListening = false
 					local binded = false
 
 					local rawr = option.key.Name
@@ -2668,6 +3115,7 @@ function Library:New(title)
 							btnBind.Text = "[ ... ]"
 							local inputWait = UserInputService.InputBegan:wait()
 							if inputWait.KeyCode.Name ~= "Unknown" then
+								isListening = true
 								local K = shorts[inputWait.KeyCode.Name] or inputWait.KeyCode.Name
 								btnBind.Text = "[ "..K.." ]"
 								rawr = inputWait.KeyCode.Name
@@ -2680,27 +3128,28 @@ function Library:New(title)
 										Vector2.new(math.huge, math.huge)
 									)
 								btnBind.Size = UDim2.new(0, 0 + newBindButtonSize.X, 0, 15)
+								isListening = false
 							end
 						end
 					)
 
 					local async = option.async
 
-			
 					
 					UserInputService.InputBegan:Connect(
 						function(c, p)
 							if not p then
 								if c.KeyCode.Name == rawr then
-									if binded == true then
-										binded = false
+									if isListening == false then
+										if binded == true then
+											binded = false
 
-									else
-										binded = false
-										pcall(option.callback)
+										else
+											binded = false
+											pcall(option.callback)
 
+										end
 									end
-
 								end
 							end
 						end
@@ -2914,5 +3363,4 @@ function Library:New(title)
 	
 	return window;
 end
-
 return Library;
