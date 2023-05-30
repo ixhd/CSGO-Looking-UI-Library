@@ -855,6 +855,7 @@ function Library:New(title)
 						local toggleBind = Instance.new("Folder")
 						local btnBind = Instance.new("TextButton")
 						local UIListLayout = Instance.new("UIListLayout")
+						
 
 						local toggledBind = {}
 						toggleBind.Name = "toggleBind"
@@ -887,6 +888,23 @@ function Library:New(title)
 						UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
 						UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 						UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+						if Toggle:FindFirstChild("ignoreDropdown") then
+							local x = Toggle:FindFirstChild("toggleBind")
+							x.UIListLayout:Destroy()
+							local xd = Instance.new("Frame", x)
+							local xdadfdf = Instance.new("UIListLayout", x)
+							xdadfdf.HorizontalAlignment = Enum.HorizontalAlignment.Right
+							xdadfdf.VerticalAlignment = Enum.VerticalAlignment.Top
+							xd.Size = UDim2.new(0,100,0,15)
+							local listlay = Instance.new("UIListLayout", xd)
+							listlay.HorizontalAlignment = Enum.HorizontalAlignment.Right
+							listlay.VerticalAlignment = Enum.VerticalAlignment.Top
+
+							local apdding = Instance.new("UIPadding", xd)
+							apdding.PaddingTop = UDim.new(0, -1)
+							x.btnBind.Parent = xd
+
+						end
 						
 						
 						local shorts = {
@@ -1225,6 +1243,24 @@ function Library:New(title)
 						UIListLayout_4.SortOrder = Enum.SortOrder.LayoutOrder
 						UIListLayout_4.VerticalAlignment = Enum.VerticalAlignment.Center
 						
+						if Toggle:FindFirstChild("ignoreDropdown") then
+							local x = Toggle:FindFirstChild("toggleColor")
+							x.UIListLayout:Destroy()
+							local xd = Instance.new("Frame", x)
+							local xdadfdf = Instance.new("UIListLayout", x)
+							xdadfdf.HorizontalAlignment = Enum.HorizontalAlignment.Right
+							xdadfdf.VerticalAlignment = Enum.VerticalAlignment.Top
+							xd.Size = UDim2.new(0,100,0,15)
+							local listlay = Instance.new("UIListLayout", xd)
+							listlay.HorizontalAlignment = Enum.HorizontalAlignment.Right
+							listlay.VerticalAlignment = Enum.VerticalAlignment.Top
+
+							local apdding = Instance.new("UIPadding", xd)
+							apdding.PaddingTop = UDim.new(0, 1)
+							x.btnColor.Parent = xd
+
+						end
+						
 						local isDADDYVal = Instance.new("BoolValue", backgroundCP)
 						isDADDYVal.Name = "isDADDYVal"
 						isDADDYVal.Value = true
@@ -1253,8 +1289,8 @@ function Library:New(title)
 							btnColor.BorderColor3 = theme.accent
 						end)
 						btnColor.MouseLeave:Connect(function()
-							if not isOpened then
-								btnColor.BorderColor3 = theme.accent							
+							if isDADDYVal.Value == false then
+								btnColor.BorderColor3 = theme.accent
 							else
 								btnColor.BorderColor3 = theme.bgDark
 							end
@@ -1342,7 +1378,9 @@ function Library:New(title)
 
 						option.callback(option.color)
 						innerColor.BackgroundColor3 = option.color
-
+						local er,ge,be = math.floor((option.color.R*255)+0.5),math.floor((option.color.G*255)+0.5),math.floor((option.color.B*255)+0.5)
+						txtDisplay.Text = er..", "..ge..", "..be
+						display.BackgroundColor3 = option.color
 						updateSection()
 						
 						function toggledColor:SetColor(color)
@@ -1413,6 +1451,24 @@ function Library:New(title)
 							apdding.PaddingTop = UDim.new(0, -1)
 							x.btnBind.Parent = xd
 							
+						end
+						
+						if Toggle:FindFirstChild("toggleColor") then
+							local x = Toggle:FindFirstChild("toggleColor")
+							x.UIListLayout:Destroy()
+							local xd = Instance.new("Frame", x)
+							local xdadfdf = Instance.new("UIListLayout", x)
+							xdadfdf.HorizontalAlignment = Enum.HorizontalAlignment.Right
+							xdadfdf.VerticalAlignment = Enum.VerticalAlignment.Top
+							xd.Size = UDim2.new(0,100,0,15)
+							local listlay = Instance.new("UIListLayout", xd)
+							listlay.HorizontalAlignment = Enum.HorizontalAlignment.Right
+							listlay.VerticalAlignment = Enum.VerticalAlignment.Top
+
+							local apdding = Instance.new("UIPadding", xd)
+							apdding.PaddingTop = UDim.new(0, 1)
+							x.btnColor.Parent = xd
+
 						end
 
 
@@ -1589,10 +1645,14 @@ function Library:New(title)
 						btnDropdown.MouseButton1Click:Connect(function()
 
 
-							if isSEXVal.Value then
+							if isSEXVal.Value == true then
 								backgroundDD.Visible = false
+								if isSEXVal.Value == true then
+									btnDropdown.BorderColor3 = theme.accent
+								else
+									btnDropdown.BorderColor3 = theme.borderDark
+								end
 								isSEXVal.Value = false
-								btnDropdown.BorderColor3 = theme.borderDark
 
 							else
 								for _, v in pairs(page:GetDescendants()) do
@@ -2419,10 +2479,14 @@ function Library:New(title)
 					btnDropdown.MouseButton1Click:Connect(function()
 						
 						
-						if isSEXVal.Value then
+						if isSEXVal.Value == true then
 							backgroundDD.Visible = false
+							if isSEXVal.Value == true then
+								btnDropdown.BorderColor3 = theme.accent
+							else
+								btnDropdown.BorderColor3 = theme.borderDark
+							end
 							isSEXVal.Value = false
-							btnDropdown.BorderColor3 = theme.borderDark
 
 						else
 							for _, v in pairs(page:GetDescendants()) do
@@ -2659,7 +2723,7 @@ function Library:New(title)
 					Color.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 					Color.BackgroundTransparency = 1.000
 					Color.Position = UDim2.new(0.0528455302, 0, 0.11084906, 0)
-					Color.Size = UDim2.new(0, 224, 0, 15)
+					Color.Size = UDim2.new(0, 224, 0, 17)
 					Color.ZIndex = 300001
 
 
@@ -2884,7 +2948,7 @@ function Library:New(title)
 						btnColor.BorderColor3 = theme.accent
 					end)
 					btnColor.MouseLeave:Connect(function()
-						if not isOpened then
+						if isDADDYVal.Value == false then
 							btnColor.BorderColor3 = theme.accent
 						else
 							btnColor.BorderColor3 = theme.bgDark
@@ -2973,6 +3037,10 @@ function Library:New(title)
 
 					option.callback(option.color)
 					innerColor.BackgroundColor3 = option.color
+					local er,ge,be = math.floor((option.color.R*255)+0.5),math.floor((option.color.G*255)+0.5),math.floor((option.color.B*255)+0.5)
+					txtDisplay.Text = er..", "..ge..", "..be
+					display.BackgroundColor3 = option.color
+
 
 					updateSection()
 
@@ -3009,12 +3077,14 @@ function Library:New(title)
 					local bind = {}
 					
 					
+					
+					
 					Key.Name = "Toggle"
 					Key.Parent = innerSection
 					Key.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 					Key.BackgroundTransparency = 1.000
 					Key.Position = UDim2.new(0.0528455302, 0, 0.11084906, 0)
-					Key.Size = UDim2.new(0, 224, 0, 15)
+					Key.Size = UDim2.new(0, 224, 0, 17)
 					Key.ZIndex = 300001
 
 					UIListLayout.Parent = Key
