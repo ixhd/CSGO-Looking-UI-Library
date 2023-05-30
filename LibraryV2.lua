@@ -686,7 +686,6 @@ function Library:New(title)
 					option.callback = typeof(option.callback) == "function" and option.callback or function() end
 					Library.flags[option.flag] = option.state
 					table.insert(Library.options, option)
-					Library.options[option.flag] = option
 
 
 					
@@ -847,7 +846,7 @@ function Library:New(title)
 						option = typeof(option) == "table" and option or {} 
 						option.key = option.key or Enum.KeyCode.World95
 						option.async = typeof(option.async) == "boolean" and option.async or false
-						option.flag = option.flag or "yesasdsad"
+						option.flag = option.flag or "Keybind"
 						option.type = "typeKeybind"
 						option.callback = typeof(option.callback) == "function" and option.callback or function() end
 						table.insert(Library.options, option)
@@ -1042,7 +1041,7 @@ function Library:New(title)
 					
 					function toggle:AddColor(option)
 						option = typeof(option) == "table" and option or {} 
-						option.flag = option.flag or "Piv"
+						option.flag = option.flag or "Color"
 						option.color = option.color or Color3.fromRGB(255, 0, 0)
 						option.type = "typeColor"
 						option.callback = typeof(option.callback) == "function" and option.callback or function() end
@@ -1103,6 +1102,8 @@ function Library:New(title)
 						innerColor.BorderColor3 = Color3.fromRGB(50, 50, 50)
 						innerColor.Size = UDim2.new(0, 23, 0, 12)
 						innerColor.ZIndex = 300003
+						innerColor.BorderSizePixel = 0
+
 
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(108, 108, 108))}
 						UIGradient.Rotation = 90
@@ -1839,9 +1840,11 @@ function Library:New(title)
 							option.callback(option.value)
 
 						end
-
+						updateSection()
 
 						return dd;
+						
+					
 					end
 				
 					
@@ -2135,7 +2138,7 @@ function Library:New(title)
 					local valueSize = math.floor(valsiz + 0.5)
 					
 
-					
+					local DMouse = game.Players.LocalPlayer:GetMouse();
 					
 					btnSlider.MouseButton1Down:Connect(function()
 
@@ -2171,6 +2174,7 @@ function Library:New(title)
 								option.callback(option.value)
 							end)
 
+							btnSlider.BorderColor3 = theme.accent
 
 
 							clickconnection:Disconnect()
@@ -2183,8 +2187,18 @@ function Library:New(title)
 								moveconnection:Disconnect()
 								releaseconnection:Disconnect()
 								clickconnection:Disconnect()
-								btnSlider.BorderColor3 = theme.borderDark
+								local y_cond = btnSlider.AbsolutePosition.Y <= DMouse.Y and DMouse.Y <= btnSlider.AbsolutePosition.Y + btnSlider.AbsoluteSize.Y
+								local x_cond = btnSlider.AbsolutePosition.X <= DMouse.X and DMouse.X <= btnSlider.AbsolutePosition.X + btnSlider.AbsoluteSize.X
+								if x_cond and y_cond then
+									btnSlider.BorderColor3 = theme.accent
+								else
+									btnSlider.BorderColor3 = theme.borderDark
 
+								end
+								
+
+		
+								
 							end
 						end)
 					end)
@@ -2681,7 +2695,7 @@ function Library:New(title)
 				function utilities:AddColor(option)
 					option = typeof(option) == "table" and option or {} 
 					option.text = option.text or "New Color"
-					option.flag = option.flag or "Piv"
+					option.flag = option.flag or option.text
 					option.color = option.color or Color3.fromRGB(255, 0, 0)
 					option.type = "typeColor"
 					option.callback = typeof(option.callback) == "function" and option.callback or function() end
@@ -2756,6 +2770,7 @@ function Library:New(title)
 					innerColor.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 					innerColor.BorderColor3 = Color3.fromRGB(50, 50, 50)
 					innerColor.Size = UDim2.new(0, 23, 0, 12)
+					innerColor.BorderSizePixel = 0
 					innerColor.ZIndex = 300003
 
 					UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(108, 108, 108))}
@@ -3065,7 +3080,7 @@ function Library:New(title)
 					option.text = option.text or "New Keybind"
 					option.key = option.key or Enum.KeyCode.World95
 					option.async = typeof(option.async) == "boolean" and option.async or false
-					option.flag = option.flag or "yesasdsad"
+					option.flag = option.flag or option.text
 					option.type = "typeKeybind"
 					option.callback = typeof(option.callback) == "function" and option.callback or function() end
 					table.insert(Library.options, option)
@@ -3079,7 +3094,7 @@ function Library:New(title)
 					
 					
 					
-					Key.Name = "Toggle"
+					Key.Name = "Keybind"
 					Key.Parent = innerSection
 					Key.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 					Key.BackgroundTransparency = 1.000
@@ -3433,4 +3448,5 @@ function Library:New(title)
 	
 	return window;
 end
+
 return Library;
