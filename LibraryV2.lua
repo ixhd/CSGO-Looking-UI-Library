@@ -1,16 +1,3 @@
-if not game:IsLoaded() then
-	game.Loaded:Wait()
-end
-
-local random = Random.new()
-
-
-
-setfpscap = setfpscap
-if setfpscap then
-	setfpscap(0)
-end
-
 local InputService = game:GetService('UserInputService');
 local TextService = game:GetService('TextService');
 local CoreGui = game:GetService('CoreGui');
